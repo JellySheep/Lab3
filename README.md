@@ -16,7 +16,6 @@ chmod +x osv-scanner
 ```
 python3 task4.py
 
-
 python3 make_bom.py bom_before.cdx.json
 
 ./osv-scanner -L bom_before.cdx.json --format json > scan_before.json
