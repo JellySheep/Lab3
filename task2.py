@@ -40,12 +40,12 @@ query($package: String!, $ecosystem: SecurityAdvisoryEcosystem!) {
 
 def parse_version(v_str):
     """Парсит строку версии в кортеж чисел для корректного сравнения."""
-    # Удаляем лишние префиксы, если они есть
+    # Удаленик лишних префиксов, если они есть
     v_str = re.sub(r'^[vV= ]+', '', v_str).strip()
     match = re.match(r'^(\d+)\.(\d+)\.(\d+)', v_str)
     if match:
         return tuple(map(int, match.groups()))
-    # Фолбэк для неполных версий (например, "2.0")
+ 
     parts = [int(p) for p in re.findall(r'\d+', v_str)[:3]]
     while len(parts) < 3:
         parts.append(0)
@@ -57,7 +57,7 @@ def match_range(version_str, range_str):
         return True
     
     current_v = parse_version(version_str)
-    # Разбиваем сложные диапазоны (например, ">= 1.0.0, < 2.0.0")
+    # Разбивает сложные диапазоны (например, ">= 1.0.0, < 2.0.0")
     clauses = [c.strip() for c in range_str.split(',')]
     
     for clause in clauses:
@@ -103,7 +103,7 @@ def fetch_vulns_for_package(pkg):
             for v in nodes:
                 range_str = v.get('vulnerableVersionRange', '')
                 
-                # Фильтруем: применима ли уязвимость к НАШЕЙ версии
+                # Фильтр: применима ли уязвимость к НАШЕЙ версии
                 if not match_range(version, range_str):
                     continue
                     
@@ -121,7 +121,7 @@ def fetch_vulns_for_package(pkg):
                 })
             
             if vulnerabilities_list:
-                # Находим безопасную версию из списка исправленных
+                # Находит безопасную версию из списка исправленных
                 try:
                     secure_version = max(secure_versions, key=parse_version)
                 except ValueError:
@@ -152,9 +152,9 @@ def main():
     print(f"[+] Запуск сканирования ({len(packages)} пакетов)...")
     result_task_2 = []
 
-    # Запускаем пул из 4 параллельных рабочих потоков
+    # Запуск пул из 4 параллельных рабочих потоков
     with ThreadPoolExecutor(max_workers=4) as executor:
-        # Получаем результаты по мере их готовности
+        # Получает результаты по мере их готовности
         futures = executor.map(fetch_vulns_for_package, packages)
         
         for index, res in enumerate(futures, 1):
