@@ -13,7 +13,7 @@ def analyze_vulnerabilities(input_file, output_md):
         vulns = item.get('vulnerabilities', [])
         secure_version = item.get('secure_version', 'Нет данных')
 
-        # Считаем количество уязвимостей по группам критичности
+        # Считает количество уязвимостей по группам критичности
         severity_counts = {'CRITICAL': 0, 'HIGH': 0, 'MODERATE': 0, 'LOW': 0}
         for v in vulns:
             sev = v.get('severity', 'UNKNOWN').upper()
@@ -24,11 +24,11 @@ def analyze_vulnerabilities(input_file, output_md):
 
         total_vulns = len(vulns)
 
-        # Формируем рекомендуемую стратегию
+        # Формирование рекомендуемых стратегий
         if secure_version != 'Нет данных':
             strategy = f"Обновить пакет до версии {secure_version}"
             
-            # Проверяем, мажорное ли это обновление (может сломать совместимость)
+            # Проверка на мажорное обновление (может сломать совместимость)
             try:
                 curr_major = int(version.split('.')[0])
                 sec_major = int(secure_version.split('.')[0])
@@ -39,7 +39,7 @@ def analyze_vulnerabilities(input_file, output_md):
         else:
             strategy = "Найти безопасный аналог или применить патч вручную"
 
-        # Формируем строку со статистикой критичности
+        # Формирует строку со статистикой критичности
         sev_str = ", ".join([f"{k}: {v}" for k, v in severity_counts.items() if v > 0])
 
         table_data.append({
@@ -52,10 +52,10 @@ def analyze_vulnerabilities(input_file, output_md):
             'strategy': strategy
         })
 
-    # Сортируем по убыванию общего количества уязвимостей
+    # Сортируется по убыванию общего количества уязвимостей
     table_data.sort(key=lambda x: x['total_vulns'], reverse=True)
 
-    # Записываем результат в Markdown файл для отчета
+    # Запись результата в Markdown файл для отчета
     with open(output_md, 'w', encoding='utf-8') as f:
         f.write("| Наименование | Версия | Экосистема | Уязвимости (по критичности) | Версия без уязв. | Рекомендуемая стратегия |\n")
         f.write("|---|---|---|---|---|---|\n")
