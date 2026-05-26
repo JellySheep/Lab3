@@ -5,7 +5,7 @@ result = []
 ecosystem = 'npm'
 seen = set()
 
-# Проходим по всем директориям, игнорируя node_modules
+# Проход по всем директориям, игнорируя node_modules
 for root, dirs, files in os.walk('.'):
     if 'node_modules' in root:
         continue
@@ -15,26 +15,26 @@ for root, dirs, files in os.walk('.'):
             with open(filepath, 'r', encoding='utf-8') as f:
                 data = json.load(f)
             
-            # Собираем dependencies и devDependencies
+            # Сбор dependencies и devDependencies
             deps = data.get('dependencies', {})
             dev_deps = data.get('devDependencies', {})
             all_deps = {**deps, **dev_deps}
             
             for name, version in all_deps.items():
-                # Очищаем версию от спецсимволов npm (^, ~)
+                # Чистка версии от спецсимволов npm (^, ~)
                 clean_version = version.replace('^', '').replace('~', '').strip()
                 
-                # Пропускаем локальные workspace-зависимости монорепозитория
+                # Пропуск локальных workspace-зависимости монорепозитория
                 if clean_version.startswith('workspace:') or clean_version == '*':
                     continue
                     
-                # Избегаем дубликатов
+                # Проверка дубликатов
                 identifier = f"{name}@{clean_version}"
                 if identifier in seen:
                     continue
                 seen.add(identifier)
                 
-                # Формируем PURL (символ @ заменяется на %40 по стандарту)
+                # Формирирование м PURL (символ @ заменяется на %40 по стандарту)
                 purl_name = name.replace('@', '%40')
                 
                 item = {
