@@ -1,5 +1,5 @@
 Необходимость для задания 2:
-* Нужно создать токен гитхаба с возможностью чтения и залить его в файл .env в папке проекта, формат ввода - echo "GITHUB_TOKEN=" > .env
+* Нужно создать токен гитхаба с возможностью чтения и залить его в файл .env в папке проекта, формат ввода - echo "GITHUB_TOKEN=ТОКЕН" > .env
 
 Файлы названы в соответствии с заданиями, make_bom.py и analyze.py требуются для задания №5:
 * make_bom.py - проводит инвентаризацию аналогично четвёртому, но в формате, который понимает сканер. Принимает аргумент выходного файла, лучше всего использовать make_bom.py bom_before.cdx.json и bom_after.cdx.json.
@@ -15,12 +15,16 @@ chmod +x osv-scanner
 4е и 5е задания:
 ```
 python3 task4.py
+mv result_task_4.json result_task_4_before.json
 
 python3 make_bom.py bom_before.cdx.json
 
 ./osv-scanner -L bom_before.cdx.json --format json > scan_before.json
 
 apt update && apt upgrade -y
+
+python3 task4.py
+mv result_task_4.json result_task_4_after.json
 
 python3 make_bom.py bom_after.cdx.json
 
