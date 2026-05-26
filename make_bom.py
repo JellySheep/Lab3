@@ -4,7 +4,7 @@ import uuid
 import sys
 
 if len(sys.argv) < 2:
-    print("Ошибка! Укажите имя файла. Пример: python3 make_bom.py bom_before.cdx.json")
+    print("Укажите имя файла. Пример: python3 make_bom.py bom_before.cdx.json")
     sys.exit(1)
 
 output_filename = sys.argv[1]
